@@ -1,0 +1,37 @@
+name: Auto Assign
+on:
+  issues:
+    types: [opened, edited, labeled, unlabeled]
+  pull_request:
+    types: [opened, edited, labeled, unlabeled]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/debug-action@v2
+      - uses: actions/checkout@v3
+      - name: 🚧　Install
+        run: |
+          yarn
+      - name: 📦　Build
+        run: |
+          yarn build
+      - name: 🔑　Generate Token
+        uses: wow-actions/use-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+      - uses: ./
+        with:
+          GITHUB_TOKEN: ${{ env.BOT_TOKEN }}
+          addReviewers: true
+          addAssignees: true
+          numberOfReviewers: 1
+          numberOfAssignees: 1
+          reviewers: |
+            /authors
+          assignees: |
+            this-is-an-unknown-assignee
+            /authors
+          skipKeywords: wip
+          excludeLabels: dependencies, wip

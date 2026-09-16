@@ -1,6 +1,6 @@
 name: Auto Assign Issues/PRs
 description: Automatically add reviewers/assignees to issues/PRs.
-author: bubkoo <bubkoo.wy@gmail.com>
+author: 'step-security'
 inputs:
   GITHUB_TOKEN:
     description: Your GitHub token for authentication.
@@ -43,7 +43,7 @@ inputs:
 
 
 runs:
-  using: node16
+  using: node24
   main: dist/index.js
 
 branding:

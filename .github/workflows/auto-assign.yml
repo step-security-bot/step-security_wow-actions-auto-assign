@@ -1,0 +1,32 @@
+name: Auto Assign
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/debug-action@v3
+      - uses: actions/checkout@v7
+      - name: 🚧　Install
+        run: |
+          yarn
+      - name: 📦　Build
+        run: |
+          yarn build
+      - uses: ./
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          addReviewers: true
+          addAssignees: true
+          numberOfReviewers: 1
+          numberOfAssignees: 1
+          reviewers: |
+            /authors
+          assignees: |
+            this-is-an-unknown-assignee
+            /authors
+          skipKeywords: wip
+          excludeLabels: dependencies, wip
